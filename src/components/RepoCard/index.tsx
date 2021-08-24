@@ -41,7 +41,7 @@ const RepoCard: React.FC<Props> = ({
       <Botside>
         <ul>
           <li>
-            <div className={`language${languageClass}`} />
+            <div className={`language ${languageClass}`} />
             <span>{language}</span>
           </li>
           <li>
