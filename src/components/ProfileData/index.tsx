@@ -22,7 +22,7 @@ interface Props {
   company?: string;
   email?: string;
   blog?: string;
-  location: string;
+  location?: string;
 }
 
 const ProfileData: React.FC<Props> = ({
