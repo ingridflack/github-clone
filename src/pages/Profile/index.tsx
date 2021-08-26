@@ -15,7 +15,8 @@ import {
 import ProfileData from "../../components/ProfileData";
 import RepoCard from "../../components/RepoCard";
 import RandomCalendar from "../../components/RandomCalendar";
-import { APIRepo, APIUser } from "../../@types";
+
+import { APIUser, APIRepo } from "../../@types";
 
 interface Data {
   user?: APIUser;
@@ -31,8 +32,8 @@ const Profile: React.FC = () => {
     Promise.all([
       fetch(`https://api.github.com/users/${username}`),
       fetch(`https://api.github.com/users/${username}/repos`),
-    ]).then(async (response) => {
-      const [userResponse, reposResponse] = response;
+    ]).then(async (responses) => {
+      const [userResponse, reposResponse] = responses;
 
       if (userResponse.status === 404) {
         setData({ error: "User not found!" });
@@ -43,7 +44,7 @@ const Profile: React.FC = () => {
       const repos = await reposResponse.json();
 
       const shuffledRepos = repos.sort(() => 0.5 - Math.random());
-      const slicedRepos = shuffledRepos.slice(0, 6);
+      const slicedRepos = shuffledRepos.slice(0, 6); // 6 repos
 
       setData({
         user,
@@ -60,15 +61,13 @@ const Profile: React.FC = () => {
     return <h1>Loading...</h1>;
   }
 
-  const TabContent = () => {
-    return (
-      <div className="content">
-        <RepoIcon />
-        <span className="label">Repositories</span>
-        <span className="number">{data.user?.public_repos}</span>
-      </div>
-    );
-  };
+  const TabContent = () => (
+    <div className="content">
+      <RepoIcon />
+      <span className="label">Repositories</span>
+      <span className="number">{data.user?.public_repos}</span>
+    </div>
+  );
 
   return (
     <Container>
@@ -77,8 +76,10 @@ const Profile: React.FC = () => {
           <span className="offset" />
           <TabContent />
         </div>
+
         <span className="line" />
       </Tab>
+
       <Main>
         <LeftSide>
           <ProfileData
@@ -99,8 +100,10 @@ const Profile: React.FC = () => {
             <TabContent />
             <span className="line" />
           </Tab>
+
           <Repos>
             <h2>Random repos</h2>
+
             <div>
               {data.repos.map((item) => (
                 <RepoCard
@@ -115,6 +118,7 @@ const Profile: React.FC = () => {
               ))}
             </div>
           </Repos>
+
           <CalendarHeading>
             Random calendar (do not represent actual data)
           </CalendarHeading>
